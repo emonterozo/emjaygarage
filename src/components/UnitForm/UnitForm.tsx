@@ -14,43 +14,54 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  Snackbar,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { PhotoView, PhotoProvider } from 'react-photo-view';
 import Image from 'next/image';
+import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebase/storage';
 import 'react-photo-view/dist/react-photo-view.css';
+import { storage } from '@/lib/firebase';
+import FullScreenLoader from '../FullScreenLoader/FullScreenLoader';
 
 type FinancingDetails = {
-  months: number;
-  amount: number;
+  months: string;
+  amount: string;
 };
 
 type Expense = {
   description: string;
-  amount: number;
+  amount: string;
+  category: string;
 };
 
 type FormProps = {
+  plate: string;
   model: string;
-  price: number;
+  price: string;
   description: string;
   detail: string;
   details: string[];
-  downpayment: number;
+  downpayment: string;
   financingOptions: FinancingDetails[];
-  purchasePrice: number;
-  soldAmount: number;
-  agentCommission: number;
+  purchasePrice: string;
+  soldAmount: string;
+  salesIncentive: string;
+  acquiredCity: string;
   expenses: Expense[];
   isFeature: string;
+  isOwnUnit: string;
   isSold: string;
   isActive: string;
   images: string[];
-  financingMonths: number;
-  financingAmount: number;
+  financingMonths: string;
+  financingAmount: string;
   expenseDescription: string;
-  expenseAmount: number;
+  expenseAmount: string;
+  expenseCategory: string;
+  dateAcquired: Date | undefined;
+  dateSold: Date | undefined;
 };
 
 type TextFieldProps = {
@@ -59,6 +70,10 @@ type TextFieldProps = {
 };
 
 const UNIT_DETAILS: TextFieldProps[] = [
+  {
+    label: 'Plate number',
+    key: 'plate',
+  },
   {
     label: 'Model',
     key: 'model',
@@ -75,16 +90,31 @@ const UNIT_DETAILS: TextFieldProps[] = [
 
 const UNIT_OTHER_DETAILS: TextFieldProps[] = [
   {
-    label: 'Purchase Price',
+    label: 'Cost of Unit',
     key: 'purchasePrice',
   },
   {
-    label: 'Sold Amount',
+    label: 'Selling Price',
     key: 'soldAmount',
   },
   {
-    label: 'Agent Commission',
-    key: 'agentCommission',
+    label: 'Sales Incentive',
+    key: 'salesIncentive',
+  },
+  {
+    label: 'Acquired City',
+    key: 'acquiredCity',
+  },
+];
+
+const DATES: TextFieldProps[] = [
+  {
+    label: 'Date Acquired',
+    key: 'dateAcquired',
+  },
+  {
+    label: 'Date Sold',
+    key: 'dateSold',
   },
 ];
 
@@ -93,7 +123,10 @@ type SelectionOptionProps = {
   value: string;
 };
 
-type SelectionKey = Pick<FormProps, 'isFeature' | 'isSold' | 'isActive'>;
+type SelectionKey = Pick<
+  FormProps,
+  'isFeature' | 'isOwnUnit' | 'isSold' | 'isActive' | 'expenseCategory'
+>;
 
 type SelectionProps = {
   label: string;
@@ -109,6 +142,14 @@ const SELECTIONS: SelectionProps[] = [
       { label: 'Yes', value: 'true' },
     ],
     key: 'isFeature',
+  },
+  {
+    label: 'Own Unit',
+    options: [
+      { label: 'No', value: 'false' },
+      { label: 'Yes', value: 'true' },
+    ],
+    key: 'isOwnUnit',
   },
   {
     label: 'Unit Status',
@@ -128,42 +169,91 @@ const SELECTIONS: SelectionProps[] = [
   },
 ];
 
+const EXPENSES_CATEGORIES = [
+  { label: 'Operating Expenses', value: 'Operating' },
+  { label: 'Non-operating Expenses', value: 'Non-operating' },
+];
+
 export default function UnitForm() {
   const theme = useTheme();
   const [form, setForm] = useState<FormProps>({
+    plate: '',
     model: '',
-    price: 0,
+    price: '0',
     description: '',
     detail: '',
     details: [],
-    downpayment: 0,
+    downpayment: '0',
     financingOptions: [],
-    purchasePrice: 0,
-    soldAmount: 0,
-    agentCommission: 0,
+    purchasePrice: '0',
+    soldAmount: '0',
+    salesIncentive: '0',
+    acquiredCity: '',
     expenses: [],
     isFeature: 'false',
+    isOwnUnit: 'true',
     isSold: 'false',
-    isActive: 'true',
+    isActive: 'false',
     images: [],
-    financingMonths: 0,
-    financingAmount: 0,
+    financingMonths: '0',
+    financingAmount: '0',
     expenseDescription: '',
-    expenseAmount: 0,
+    expenseAmount: '0',
+    expenseCategory: 'Operating',
+    dateAcquired: undefined,
+    dateSold: undefined,
   });
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
+    message: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePickImages = () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
     input.multiple = true;
-    input.onchange = (event) => {
+    input.onchange = async (event) => {
+      setIsLoading(true);
       const files = (event.target as HTMLInputElement).files;
       if (!files) return;
 
-      const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
+      const selectedFiles = Array.from(files);
 
-      setForm((prev) => ({ ...prev, images: [...prev.images, ...newImages] }));
+      const uploadPromises = selectedFiles.map((file) => {
+        const fileRef = ref(storage, Date.now().toString());
+        const uploadTask = uploadBytesResumable(fileRef, file);
+
+        return new Promise<string>((resolve, reject) => {
+          uploadTask.on(
+            'state_changed',
+            null,
+            (error) => reject(error),
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref)
+                .then((downloadURL) => resolve(downloadURL))
+                .catch(reject);
+            },
+          );
+        });
+      });
+
+      try {
+        const downloadURLs = await Promise.all(uploadPromises);
+        setForm((prev) => ({ ...prev, images: [...prev.images, ...downloadURLs] }));
+        setSnackbar({
+          isOpen: true,
+          message: 'Successfully uploaded product images.',
+        });
+      } catch {
+        setSnackbar({
+          isOpen: true,
+          message: 'Error occurred uploading product image.',
+        });
+      } finally {
+        setIsLoading(false);
+      }
     };
     input.click();
   };
@@ -192,6 +282,26 @@ export default function UnitForm() {
     let chips = [...form[key]];
     chips = chips.filter((_, i) => i !== index);
     setForm((prev) => ({ ...prev, [key]: chips }));
+
+    if (key === 'images') {
+      const filteredArray = form.images.filter((_, i) => i === index);
+      const desertRef = ref(storage, filteredArray[0]);
+
+      // Delete the file
+      deleteObject(desertRef)
+        .then(() => {
+          setSnackbar({
+            isOpen: true,
+            message: 'Successfully deleted product image.',
+          });
+        })
+        .catch(() => {
+          setSnackbar({
+            isOpen: true,
+            message: 'Error occurred deleting product image.',
+          });
+        });
+    }
   };
 
   const addFinancingExpenseDetails = (
@@ -201,16 +311,100 @@ export default function UnitForm() {
     details.push(
       key === 'financingOptions'
         ? { months: form.financingMonths, amount: form.financingAmount }
-        : { description: form.expenseDescription, amount: form.expenseAmount },
+        : {
+            description: form.expenseDescription,
+            amount: form.expenseAmount,
+            category: form.expenseCategory,
+          },
     );
     setForm((prev) => ({
       ...prev,
       [key]: details,
-      financingMonths: 0,
-      financingAmount: 0,
+      financingMonths: '0',
+      financingAmount: '0',
       expenseDescription: '',
-      expenseAmount: 0,
+      expenseAmount: '0',
+      expenseCategory: 'Operating',
     }));
+  };
+
+  const saveUnit = async () => {
+    setIsLoading(true);
+    const expenses = [];
+
+    if (parseInt(form.purchasePrice, 10) > 0) {
+      expenses.push({
+        description: 'Cost of Unit',
+        amount: form.purchasePrice,
+        category: 'Operating',
+      });
+    }
+
+    if (parseInt(form.salesIncentive, 10) > 0) {
+      expenses.push({
+        description: 'Sales Incentive',
+        amount: form.salesIncentive,
+        category: 'Operating',
+      });
+    }
+
+    const totalExpenses = expenses.reduce((sum, expense) => {
+      return sum + parseFloat(expense.amount || '0');
+    }, 0);
+
+    const payload = {
+      plate: form.plate,
+      name: form.model,
+      description: form.description,
+      details: form.details,
+      price: form.price === '' ? '0' : form.price,
+      images: form.images,
+      financing_details: {
+        down_payment: form.downpayment === '' ? '0' : form.downpayment,
+        terms: form.financingOptions,
+      },
+      is_feature: form.isFeature === 'true',
+      is_own_unit: form.isOwnUnit === 'true',
+      is_sold: form.isSold === 'true',
+      is_active: form.isActive === 'true',
+      purchase_price: form.purchasePrice === '' ? '0' : form.purchasePrice,
+      expenses: [...expenses, ...form.expenses],
+      total_expenses: totalExpenses,
+      sold_price: form.soldAmount === '' ? '0' : form.soldAmount,
+      sales_incentive: form.salesIncentive === '' ? '0' : form.salesIncentive,
+      date_acquired: form.dateAcquired ?? null,
+      date_sold: form.dateSold ?? null,
+      acquired_city: form.acquiredCity,
+    };
+
+    try {
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        setSnackbar({
+          isOpen: true,
+          message: 'Vehicle has been added successfully.',
+        });
+      } else {
+        setSnackbar({
+          isOpen: true,
+          message: 'Failed to add vehicle. Please try again later.',
+        });
+      }
+    } catch {
+      setSnackbar({
+        isOpen: true,
+        message: 'Failed to add vehicle. Please try again later.',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -228,6 +422,7 @@ export default function UnitForm() {
         color: theme.palette.secondary.main,
       }}
     >
+      {isLoading && <FullScreenLoader />}
       <Typography
         sx={{
           fontSize: {
@@ -315,7 +510,7 @@ export default function UnitForm() {
           >
             {form.details.map((item, index) => (
               <Chip
-                key={index}
+                key={item}
                 label={item}
                 color="secondary"
                 sx={{
@@ -441,7 +636,7 @@ export default function UnitForm() {
               {item.label}
             </Typography>
             <TextField
-              type="number"
+              type={item.key === 'acquiredCity' ? 'text' : 'number'}
               fullWidth
               variant="outlined"
               margin="normal"
@@ -455,13 +650,27 @@ export default function UnitForm() {
             />
           </Box>
         ))}
+        {DATES.map((item) => (
+          <Box key={item.key}>
+            <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+              {item.label}
+            </Typography>
+            <TextField
+              type="date"
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              value={form[item.key]}
+            />
+          </Box>
+        ))}
         <Divider sx={{ borderColor: '#333', my: 1 }} />
         <Box>
           <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
             Unit Expenses:
           </Typography>
           <Grid container spacing={1} mt={2}>
-            <Grid size={6}>
+            <Grid size={4}>
               <Box>
                 <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
                   Description
@@ -475,7 +684,7 @@ export default function UnitForm() {
                 />
               </Box>
             </Grid>
-            <Grid size={6}>
+            <Grid size={4}>
               <Box>
                 <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
                   Amount
@@ -493,6 +702,53 @@ export default function UnitForm() {
                     },
                   }}
                 />
+              </Box>
+            </Grid>
+            <Grid size={4}>
+              <Box>
+                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                  Category
+                </Typography>
+                <Select
+                  value={form.expenseCategory}
+                  fullWidth
+                  sx={{
+                    marginTop: 1,
+                    color: theme.palette.secondary.main,
+                    '.MuiOutlinedInput-notchedOutline': {
+                      borderColor: theme.palette.secondary.main,
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: theme.palette.secondary.main,
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: theme.palette.secondary.main,
+                    },
+                    '.MuiSelect-icon': {
+                      color: theme.palette.secondary.main,
+                    },
+                    fontFamily: 'Poppins',
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        backgroundColor: '#1a1a1a',
+                        color: theme.palette.secondary.main,
+                      },
+                    },
+                  }}
+                  onChange={(event) => handleSelectChange('expenseCategory', event)}
+                >
+                  {EXPENSES_CATEGORIES.map((option) => (
+                    <MenuItem
+                      key={option.value}
+                      value={option.value}
+                      sx={{ fontFamily: 'Poppins' }}
+                    >
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
               </Box>
             </Grid>
           </Grid>
@@ -521,7 +777,7 @@ export default function UnitForm() {
             {form.expenses.map((item, index) => (
               <Chip
                 key={item.description}
-                label={`${item.description} months (₱${item.amount.toLocaleString()})`}
+                label={`${item.category} Expenses - ${item.description}  (₱${item.amount.toLocaleString()})`}
                 color="secondary"
                 sx={{
                   fontFamily: 'Poppins',
@@ -599,7 +855,7 @@ export default function UnitForm() {
           <PhotoProvider>
             <Grid container spacing={3} paddingTop={5}>
               {form.images.map((src, index) => (
-                <Grid key={index} size={{ xs: 12, md: 4 }}>
+                <Grid key={src} size={{ xs: 12, md: 4 }}>
                   <Box
                     sx={{
                       position: 'relative',
@@ -644,7 +900,7 @@ export default function UnitForm() {
             sx={{
               backgroundColor: theme.palette.secondary.main,
             }}
-            onClick={() => console.log(form)}
+            onClick={saveUnit}
           >
             Save Unit
           </Button>
@@ -659,6 +915,23 @@ export default function UnitForm() {
           </Button>
         </Box>
       </Box>
+      <Snackbar
+        open={snackbar.isOpen}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        autoHideDuration={3000}
+        onClose={() => {
+          setSnackbar({
+            isOpen: false,
+            message: '',
+          });
+        }}
+        message={snackbar.message}
+        slotProps={{
+          content: {
+            sx: { backgroundColor: '#4BB543', fontFamily: 'Poppins' },
+          },
+        }}
+      />
     </Box>
   );
 }

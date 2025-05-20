@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import connectDatabase from '@/lib/connectDatabase';
 import Product from '@/model/Product';
 import { Footer, Product as ProductComponent, Products } from '@/components';
-import { Product as ProductTypes } from '@/types/types';
 import { Box } from '@mui/material';
 
 type ProductPageProps = {
@@ -21,29 +20,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   await connectDatabase();
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const product: ProductTypes | null = await Product.findById(id).lean();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  let products: ProductTypes[] = await Product.find({ is_active: true, _id: { $ne: id } })
+  const product = await Product.findById(id).lean();
+
+  const products = await Product.find({ is_active: true, _id: { $ne: id } })
     .sort({ is_sold: 1 })
     .lean();
-  products = products.map((product) => ({
-    ...product,
-    _id: product._id.toString(), // Convert ObjectId to string
-  }));
 
   if (!product) {
     return notFound();
   }
 
-  product._id = product._id.toString();
+  const productData = JSON.parse(JSON.stringify(product));
+  const productsData = JSON.parse(JSON.stringify(products));
 
   return (
     <Box>
-      <ProductComponent product={product} />
-      <Products products={products} />
+      <ProductComponent product={productData} />
+      <Products products={productsData} />
       <Footer />
     </Box>
   );

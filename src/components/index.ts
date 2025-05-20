@@ -8,6 +8,8 @@ import Product from './Product/Product';
 import AdminProducts from './AdminProducts/AdminProducts';
 import AdminProduct from './AdminProduct/AdminProduct';
 import UnitForm from './UnitForm/UnitForm';
+import MUIProvider from './MUIProvider/MUIProvider';
+import FullScreenLoader from './FullScreenLoader/FullScreenLoader';
 
 export {
   Banner,
@@ -20,4 +22,6 @@ export {
   AdminProducts,
   AdminProduct,
   UnitForm,
+  MUIProvider,
+  FullScreenLoader,
 };

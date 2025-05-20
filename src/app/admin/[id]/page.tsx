@@ -16,13 +16,9 @@ export default async function AdminPage({ params }: AdminPageProps) {
 
   if (id !== NEXT_PUBLIC_ADMIN_KEY) return notFound();
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  let products: TProduct[] = await Product.find({}).sort({ is_sold: 1 }).lean();
-  products = products.map((product) => ({
-    ...product,
-    _id: product._id.toString(),
-  }));
+  const products = await Product.find({}).sort({ is_sold: 1 }).lean();
 
-  return <AdminProducts products={products} />;
+  const data = JSON.parse(JSON.stringify(products));
+
+  return <AdminProducts products={data} />;
 }

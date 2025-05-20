@@ -65,7 +65,7 @@ export default function AdminProduct({ product }: Readonly<ProductProps>) {
             {[
               { label: 'Purchase Price', value: product.purchase_price },
               { label: 'Sold Amount', value: product.sold_price },
-              { label: 'Agent Commission', value: product.agent_commission },
+              { label: 'Agent Commission', value: product.sales_incentive },
             ].map((item) => (
               <Box key={item.label}>
                 <Typography
@@ -107,8 +107,8 @@ export default function AdminProduct({ product }: Readonly<ProductProps>) {
                   Expenses
                 </Typography>
                 <List dense>
-                  {product.expenses.map((item, index) => (
-                    <ListItem key={index} disablePadding sx={{ marginTop: '3px' }}>
+                  {product.expenses.map((item) => (
+                    <ListItem key={item._id} disablePadding sx={{ marginTop: '3px' }}>
                       <Typography
                         sx={{
                           color: '#D9D9D9',

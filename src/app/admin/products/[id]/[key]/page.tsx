@@ -24,15 +24,15 @@ export default async function AdminProductPreview({ params }: AdminProductPrevie
 
   await connectDatabase();
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const product: ProductTypes | null = await Product.findById(id).lean();
+  const product = await Product.findById(id).lean();
 
   if (key !== NEXT_PUBLIC_ADMIN_KEY || !product) return notFound();
-  product._id = product._id.toString();
+
+  const data = JSON.parse(JSON.stringify(product));
+
   return (
     <Box>
-      <AdminProduct product={product} />
+      <AdminProduct product={data} />
       <Footer />
     </Box>
   );

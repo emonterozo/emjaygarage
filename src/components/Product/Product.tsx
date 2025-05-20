@@ -271,8 +271,8 @@ export default function Product({ product }: Readonly<ProductProps>) {
                         '&::-webkit-scrollbar': { display: 'none' },
                       }}
                     >
-                      {product?.images.slice(1).map((image, index) => (
-                        <PhotoView src={image} key={index}>
+                      {product?.images.slice(1).map((image) => (
+                        <PhotoView src={image} key={image}>
                           <Card
                             sx={{
                               borderRadius: '24px',

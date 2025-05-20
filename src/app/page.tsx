@@ -12,23 +12,21 @@ export default async function Home() {
   await connectDatabase();
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  let products: TProduct[] = await Product.find({ is_active: true }).sort({ is_sold: 1 }).lean();
-  products = products.map((product) => ({
-    ...product,
-    _id: product._id.toString(),
-  }));
+  const products = await Product.find({ is_active: true }).sort({ is_sold: 1 }).lean();
 
-  const catalogProducts = [];
-  const remainingProducts = [];
+  const productsData: TProduct[] = JSON.parse(JSON.stringify(products));
+
+  const catalogProducts: TProduct[] = [];
+  const remainingProducts: TProduct[] = [];
 
   // Find 1 featured product
-  const featuredProductIndex = products.findIndex((p) => p.is_feature === true);
+  const featuredProductIndex = productsData.findIndex((p) => p.is_feature === true);
   if (featuredProductIndex !== -1) {
-    catalogProducts.push(products[featuredProductIndex]);
+    catalogProducts.push(productsData[featuredProductIndex]);
   }
 
   // Remove the featured product from products array to avoid duplication
-  const productsWithoutFeatured = products.filter((_, idx) => idx !== featuredProductIndex);
+  const productsWithoutFeatured = productsData.filter((_, idx) => idx !== featuredProductIndex);
 
   // Filter products with is_sold false and true
   const unsoldProducts = productsWithoutFeatured.filter((p) => p.is_sold === false);
@@ -50,9 +48,9 @@ export default async function Home() {
 
   // Now put the remaining products into remainingProducts
   // They are those not in catalogProducts
-  const catalogProductIds = new Set(catalogProducts.map((p) => p._id.toString()));
-  for (const product of products) {
-    if (!catalogProductIds.has(product._id.toString())) {
+  const catalogProductIds = new Set(catalogProducts.map((p) => p._id));
+  for (const product of productsData) {
+    if (!catalogProductIds.has(product._id)) {
       remainingProducts.push(product);
     }
   }

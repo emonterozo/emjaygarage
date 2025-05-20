@@ -35,7 +35,7 @@
     ],
     "total_expenses": 5000,
     "sold_price": 60000,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2018 Honda CRV S",
@@ -71,7 +71,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2023 Mitsubishi Strada",
@@ -113,7 +113,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2018  Ford Everest Titanium Plus ",
@@ -157,7 +157,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2018 Honda City VX",
@@ -202,7 +202,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2014 Honda City E 1.5L - Transformer",
@@ -234,7 +234,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2006 TOYOTA FORTUNER VVTI GAS",
@@ -271,7 +271,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2022 Toyota Vios XLE",
@@ -314,7 +314,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2016 Honda City E",
@@ -342,7 +342,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2014 Honda City VX ",
@@ -384,7 +384,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2014 Honda City VX",
@@ -422,7 +422,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2007 Honda Civic FD 1.8s",
@@ -449,7 +449,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2015 Toyota Innova G",
@@ -485,7 +485,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2024 Toyota Vios XLE",
@@ -527,7 +527,7 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   },
   {
     "name": "2014 Honda City VX",
@@ -556,6 +556,6 @@
     "expenses": [],
     "total_expenses": 0,
     "sold_price": 0,
-    "agent_commission": 0
+    "sales_incentive": 0
   }
 ]
