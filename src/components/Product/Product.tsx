@@ -93,7 +93,7 @@ export default function Product({ product }: Readonly<ProductProps>) {
                   },
                 }}
               >
-                {product?.headline}
+                {product?.description}
               </Typography>
               <Box>
                 <Typography

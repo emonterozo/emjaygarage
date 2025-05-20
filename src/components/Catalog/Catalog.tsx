@@ -107,7 +107,7 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
                     fontWeight: 'light',
                   }}
                 >
-                  {products[0].headline}
+                  {products[0].description}
                 </Typography>
                 <Typography color="#D9D9D9" sx={{ fontSize: '24px' }}>
                   {`₱ ${products[0].price.toLocaleString()}`}

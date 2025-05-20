@@ -16,7 +16,7 @@ export type Expense = {
 export type Product = {
   _id: string;
   name: string;
-  headline: string;
+  description: string;
   description: string;
   details: string[];
   price: number;

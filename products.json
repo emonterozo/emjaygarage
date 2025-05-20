@@ -1,7 +1,7 @@
 [
   {
     "name": "2010 Honda City 1.5",
-    "headline": "",
+    "description": "",
     "details": [
       "Top of the line",
       "Paddle Shifter",
@@ -39,8 +39,7 @@
   },
   {
     "name": "2018 Honda CRV S",
-    "headline": "2018 Honda CR-V S 1.6L – Well-maintained and fuel-efficient, this spacious SUV offers a smooth and comfortable drive. Equipped with modern features, a clean interior, and a powerful yet economical diesel engine, it's perfect for city and long drives. Ready for its next owner.",
-    "description": "Asking Price: Php 1,038,000 ( Negotiable Upon Personal Viewing )\n\nDM or Call for inquiry\nCALL: 0915-481-4562\nLOCATION: San Simon, Pampanga",
+    "description": "2018 Honda CR-V S 1.6L – Well-maintained and fuel-efficient, this spacious SUV offers a smooth and comfortable drive. Equipped with modern features, a clean interior, and a powerful yet economical diesel engine, it's perfect for city and long drives. Ready for its next owner.",
     "details": [
       "CASH OR TRADE-IN",
       "Diesel Automatic S-Variant  ",
@@ -76,8 +75,7 @@
   },
   {
     "name": "2023 Mitsubishi Strada",
-    "headline": "2023 Mitsubishi Strada – A rugged and reliable pickup built for both work and adventure. With a powerful engine, smooth handling, and a spacious interior, it delivers comfort and performance on any terrain. Well-maintained and ready for its next owner.",
-    "description": "Asking Price: Php 1,120,000 ( Negotiable )\n\nDM or Call for inquiry\nCALL: 0915-481-4562\nLOCATION: Antipolo City",
+    "description": "2023 Mitsubishi Strada – A rugged and reliable pickup built for both work and adventure. With a powerful engine, smooth handling, and a spacious interior, it delivers comfort and performance on any terrain. Well-maintained and ready for its next owner.",
     "details": [
       "Complete Papers",
       "Almost New Condition ",
@@ -119,8 +117,7 @@
   },
   {
     "name": "2018  Ford Everest Titanium Plus ",
-    "headline": "2018 Ford Everest Titanium Plus – A premium 7-seater SUV with a powerful yet fuel-efficient engine, perfect for city drives and off-road adventures. Loaded with advanced features, a luxurious interior, and top-notch safety, it offers comfort and reliability. Well-maintained and ready for a new owner.",
-    "description": "Financing Details:\nAll In DP ₱300,677.00\n\n1 year ₱78,528.67\n2 years ₱45,766.25\n3 years ₱33,011.83\nTransfer Fee, Chattel Fee and 1 year comprehensive insurance are included)\n\nDM or Call for inquiry\nCALL: 0915-481-4562\nLOCATION: San Simon, Pampanga",
+    "description": "2018 Ford Everest Titanium Plus – A premium 7-seater SUV with a powerful yet fuel-efficient engine, perfect for city drives and off-road adventures. Loaded with advanced features, a luxurious interior, and top-notch safety, it offers comfort and reliability. Well-maintained and ready for a new owner.",
     "details": [
       "CASH | FOR FINANCING | TRADE-IN",
       "( Top of the Line ) ( Premium plus )",
@@ -164,8 +161,7 @@
   },
   {
     "name": "2018 Honda City VX",
-    "headline": "2018 Honda City VX – A stylish and fuel-efficient sedan with a smooth ride and modern features. Equipped with a spacious interior, touchscreen infotainment, and advanced safety features, it’s perfect for city driving and road trips. Well-maintained and ready for a new owner.",
-    "description": "580k only! Slightly negotiable.\n\nFinancing Option:\n\nAll in DP =  132,750.00 \n\n4 years =  17,417\n3 Years =  20,139\n2 years =  27,084\n\nDM or Call for inquiry\nCALL: 0915-481-4562\nLOCATION: Marilao, Bulacan",
+    "description": "2018 Honda City VX – A stylish and fuel-efficient sedan with a smooth ride and modern features. Equipped with a spacious interior, touchscreen infotainment, and advanced safety features, it’s perfect for city driving and road trips. Well-maintained and ready for a new owner.",
     "details": [
       "CASH OR FINANCING",
       "Automatic Transmission",
@@ -210,7 +206,7 @@
   },
   {
     "name": "2014 Honda City E 1.5L - Transformer",
-    "headline": "",
+    "description": "",
     "details": [
       "Top of the line",
       "With Paddle Shifter",
@@ -242,7 +238,7 @@
   },
   {
     "name": "2006 TOYOTA FORTUNER VVTI GAS",
-    "headline": "",
+    "description": "",
     "details": [
       "AUTOMATIC 4x2",
       "78xxxx MILEAGE",
@@ -279,8 +275,7 @@
   },
   {
     "name": "2022 Toyota Vios XLE",
-    "headline": "2022 Toyota Vios XLE – A fuel-efficient and reliable sedan, perfect for daily commutes and long drives. With a smooth automatic transmission, spacious interior, and modern features, it offers both comfort and practicality. Well-maintained and ready for its next owner.",
-    "description": "All in DP: 156k (except insurance)\n\n4 Years - 19,021\n3 Years -  21,878\n2 Years -  29,517",
+    "description": "2022 Toyota Vios XLE – A fuel-efficient and reliable sedan, perfect for daily commutes and long drives. With a smooth automatic transmission, spacious interior, and modern features, it offers both comfort and practicality. Well-maintained and ready for its next owner.",
     "details": [
       "CASH OR FINANCING",
       "Automatic transmission",
@@ -323,7 +318,7 @@
   },
   {
     "name": "2016 Honda City E",
-    "headline": "",
+    "description": "",
     "details": [
       "Automatic Transmission",
       "Excellent Condition",
@@ -351,7 +346,7 @@
   },
   {
     "name": "2014 Honda City VX ",
-    "headline": "",
+    "description": "",
     "details": [
       "Face lifted to 2018 model",
       "Modulo Spoiler",
@@ -393,7 +388,7 @@
   },
   {
     "name": "2014 Honda City VX",
-    "headline": "2014 Honda City VX is a well-maintained and fuel-efficient sedan that offers a smooth and comfortable ride. With modern features, a clean interior, and excellent fuel efficiency, it’s perfect for both city driving and long trips.",
+    "description": "2014 Honda City VX is a well-maintained and fuel-efficient sedan that offers a smooth and comfortable ride. With modern features, a clean interior, and excellent fuel efficiency, it’s perfect for both city driving and long trips.",
     "details": [
       "1st owner acquired",
       "Automatic Transmission",
@@ -431,7 +426,7 @@
   },
   {
     "name": "2007 Honda Civic FD 1.8s",
-    "headline": "",
+    "description": "",
     "details": [
       "R18 - Engine",
       "Automatic Transmission ",
@@ -458,7 +453,7 @@
   },
   {
     "name": "2015 Toyota Innova G",
-    "headline": "",
+    "description": "",
     "details": [
       "D4D Diesel Engine",
       "Automatic transmission",
@@ -494,7 +489,7 @@
   },
   {
     "name": "2024 Toyota Vios XLE",
-    "headline": "",
+    "description": "",
     "details": [
       "Automatic Transmission ",
       "9k+ Mileage only! (Original Odometer)",
@@ -536,7 +531,7 @@
   },
   {
     "name": "2014 Honda City VX",
-    "headline": "",
+    "description": "",
     "details": [
       "Top of the line",
       "Paddle Shifter",
