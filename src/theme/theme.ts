@@ -41,6 +41,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'Poppins',
+        },
+      },
+    },
   },
 });
 
