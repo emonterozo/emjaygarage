@@ -38,6 +38,7 @@ export default function AdminProducts({ products }: Readonly<AdminProductsProps>
           xs: '35px',
           md: '70px',
         },
+        minHeight: '100vh',
       }}
     >
       <Box

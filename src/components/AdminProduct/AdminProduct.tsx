@@ -3,11 +3,19 @@
 import React from 'react';
 import { Box, Divider, Fab, List, ListItem, Typography, useTheme } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useRouter } from 'next/navigation';
 
 import Product, { ProductProps } from '../Product/Product';
+const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
 
 export default function AdminProduct({ product }: Readonly<ProductProps>) {
   const theme = useTheme();
+  const router = useRouter();
+
+  const handlePressEdit = () => {
+    router.push(`/admin/edit/${product._id}/${NEXT_PUBLIC_ADMIN_KEY}`);
+  };
+
   return (
     <Box>
       <Product product={product} />
@@ -171,6 +179,7 @@ export default function AdminProduct({ product }: Readonly<ProductProps>) {
         color="secondary"
         aria-label="add"
         sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        onClick={handlePressEdit}
       >
         <EditIcon sx={{ mr: 1 }} />
         Edit Unit

@@ -24,6 +24,7 @@ import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebas
 import 'react-photo-view/dist/react-photo-view.css';
 import { storage } from '@/lib/firebase';
 import FullScreenLoader from '../FullScreenLoader/FullScreenLoader';
+import { useRouter } from 'next/navigation';
 
 type FinancingDetails = {
   months: string;
@@ -37,6 +38,7 @@ type Expense = {
 };
 
 type FormProps = {
+  _id?: string;
   plate: string;
   model: string;
   price: string;
@@ -174,35 +176,44 @@ const EXPENSES_CATEGORIES = [
   { label: 'Non-operating Expenses', value: 'Non-operating' },
 ];
 
-export default function UnitForm() {
+type UnitFormProps = {
+  data?: FormProps;
+};
+
+const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
+
+export default function UnitForm({ data }: Readonly<UnitFormProps>) {
   const theme = useTheme();
-  const [form, setForm] = useState<FormProps>({
-    plate: '',
-    model: '',
-    price: '0',
-    description: '',
-    detail: '',
-    details: [],
-    downpayment: '0',
-    financingOptions: [],
-    purchasePrice: '0',
-    soldAmount: '0',
-    salesIncentive: '0',
-    acquiredCity: '',
-    expenses: [],
-    isFeature: 'false',
-    isOwnUnit: 'true',
-    isSold: 'false',
-    isActive: 'false',
-    images: [],
-    financingMonths: '0',
-    financingAmount: '0',
-    expenseDescription: '',
-    expenseAmount: '0',
-    expenseCategory: 'Operating',
-    dateAcquired: undefined,
-    dateSold: undefined,
-  });
+  const router = useRouter();
+  const [form, setForm] = useState<FormProps>(
+    data ?? {
+      plate: '',
+      model: '',
+      price: '0',
+      description: '',
+      detail: '',
+      details: [],
+      downpayment: '0',
+      financingOptions: [],
+      purchasePrice: '0',
+      soldAmount: '0',
+      salesIncentive: '0',
+      acquiredCity: '',
+      expenses: [],
+      isFeature: 'false',
+      isOwnUnit: 'true',
+      isSold: 'false',
+      isActive: 'false',
+      images: [],
+      financingMonths: '0',
+      financingAmount: '0',
+      expenseDescription: '',
+      expenseAmount: '0',
+      expenseCategory: 'Operating',
+      dateAcquired: undefined,
+      dateSold: undefined,
+    },
+  );
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
     message: '',
@@ -330,7 +341,7 @@ export default function UnitForm() {
 
   const saveUnit = async () => {
     setIsLoading(true);
-    const expenses = [];
+    let expenses = [];
 
     if (parseInt(form.purchasePrice, 10) > 0) {
       expenses.push({
@@ -348,11 +359,19 @@ export default function UnitForm() {
       });
     }
 
+    expenses = [...expenses, ...form.expenses];
+
     const totalExpenses = expenses.reduce((sum, expense) => {
       return sum + parseFloat(expense.amount || '0');
     }, 0);
 
+    const terms = form.financingOptions.map((item) => ({
+      term: parseInt(item.months, 0),
+      amount: parseFloat(item.amount).toFixed(2),
+    }));
+
     const payload = {
+      _id: form._id,
       plate: form.plate,
       name: form.model,
       description: form.description,
@@ -361,14 +380,14 @@ export default function UnitForm() {
       images: form.images,
       financing_details: {
         down_payment: form.downpayment === '' ? '0' : form.downpayment,
-        terms: form.financingOptions,
+        terms: terms,
       },
       is_feature: form.isFeature === 'true',
       is_own_unit: form.isOwnUnit === 'true',
       is_sold: form.isSold === 'true',
       is_active: form.isActive === 'true',
       purchase_price: form.purchasePrice === '' ? '0' : form.purchasePrice,
-      expenses: [...expenses, ...form.expenses],
+      expenses: expenses,
       total_expenses: totalExpenses,
       sold_price: form.soldAmount === '' ? '0' : form.soldAmount,
       sales_incentive: form.salesIncentive === '' ? '0' : form.salesIncentive,
@@ -379,7 +398,7 @@ export default function UnitForm() {
 
     try {
       const res = await fetch('/api/products', {
-        method: 'POST',
+        method: data ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -389,18 +408,58 @@ export default function UnitForm() {
       if (res.ok) {
         setSnackbar({
           isOpen: true,
-          message: 'Vehicle has been added successfully.',
+          message: `Vehicle has been ${data ? 'updated' : 'added'} successfully.`,
         });
+
+        router.push(
+          data
+            ? `/admin/products/${data._id}/${NEXT_PUBLIC_ADMIN_KEY}`
+            : `/admin/${NEXT_PUBLIC_ADMIN_KEY}`,
+        );
       } else {
         setSnackbar({
           isOpen: true,
-          message: 'Failed to add vehicle. Please try again later.',
+          message: `Failed to ${data ? 'updated' : 'added'} vehicle. Please try again later.`,
         });
       }
     } catch {
       setSnackbar({
         isOpen: true,
-        message: 'Failed to add vehicle. Please try again later.',
+        message: `Failed to ${data ? 'updated' : 'added'} vehicle. Please try again later.`,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deleteUnit = async () => {
+    setIsLoading(true);
+
+    form.images.forEach(async (image) => {
+      await deleteObject(ref(storage, image));
+    });
+
+    try {
+      const res = await fetch(`/api/products?id=${data?._id}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        setSnackbar({
+          isOpen: true,
+          message: 'Vehicle has been deleted successfully.',
+        });
+        router.push(`/admin/${NEXT_PUBLIC_ADMIN_KEY}`);
+      } else {
+        setSnackbar({
+          isOpen: true,
+          message: 'Failed to delete vehicle. Please try again later.',
+        });
+      }
+    } catch {
+      setSnackbar({
+        isOpen: true,
+        message: 'Failed to delete vehicle. Please try again later.',
       });
     } finally {
       setIsLoading(false);
@@ -432,7 +491,7 @@ export default function UnitForm() {
           color: '#D9D9D9',
         }}
       >
-        Add New Unit
+        {data ? 'Edit Unit' : 'Add New Unit'}
       </Typography>
 
       <Box sx={{ marginTop: '57px', display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -616,7 +675,10 @@ export default function UnitForm() {
             {form.financingOptions.map((item, index) => (
               <Chip
                 key={item.months}
-                label={`${item.months} months (₱${item.amount.toLocaleString()})`}
+                label={`${item.months} months (₱${parseFloat(item.amount).toLocaleString(
+                  undefined,
+                  { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+                )})`}
                 color="secondary"
                 sx={{
                   fontFamily: 'Poppins',
@@ -661,6 +723,7 @@ export default function UnitForm() {
               variant="outlined"
               margin="normal"
               value={form[item.key]}
+              onChange={(event) => handleTextFieldChange(item.key, event)}
             />
           </Box>
         ))}
@@ -777,7 +840,12 @@ export default function UnitForm() {
             {form.expenses.map((item, index) => (
               <Chip
                 key={item.description}
-                label={`${item.category} Expenses - ${item.description}  (₱${item.amount.toLocaleString()})`}
+                label={`${item.category} Expenses - ${item.description}  (₱${parseFloat(
+                  item.amount,
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })})`}
                 color="secondary"
                 sx={{
                   fontFamily: 'Poppins',
@@ -902,17 +970,20 @@ export default function UnitForm() {
             }}
             onClick={saveUnit}
           >
-            Save Unit
+            Submit
           </Button>
-          <Button
-            fullWidth
-            sx={{
-              backgroundColor: theme.palette.error.main,
-              color: theme.palette.secondary.main,
-            }}
-          >
-            Delete Unit
-          </Button>
+          {data && (
+            <Button
+              fullWidth
+              sx={{
+                backgroundColor: theme.palette.error.main,
+                color: theme.palette.secondary.main,
+              }}
+              onClick={deleteUnit}
+            >
+              Delete
+            </Button>
+          )}
         </Box>
       </Box>
       <Snackbar

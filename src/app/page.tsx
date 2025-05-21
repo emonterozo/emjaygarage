@@ -58,9 +58,9 @@ export default async function Home() {
   return (
     <Box>
       <Banner />
-      <Catalog products={catalogProducts} />
+      {catalogProducts.length > 0 && <Catalog products={catalogProducts} />}
       <WhyChooseUs />
-      <Products products={remainingProducts} />
+      {remainingProducts.length > 0 && <Products products={remainingProducts} />}
       <Contact />
       <Footer />
     </Box>

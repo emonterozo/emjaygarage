@@ -13,6 +13,7 @@ export type Expense = {
   _id: string;
   description: string;
   amount: string;
+  category: string;
 };
 
 export type Product = {

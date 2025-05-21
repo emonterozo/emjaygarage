@@ -64,6 +64,8 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
             sx={{
               bgcolor: '#081013',
               borderRadius: '24px',
+              position: 'relative',
+              overflow: 'hidden',
             }}
             onClick={() => handlePressProduct(products[0]._id)}
           >
@@ -114,6 +116,21 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
                 </Typography>
               </Box>
             </CardContent>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                background: 'rgba(8, 16, 19, 0.9)',
+                padding: '10px',
+                gap: '10px',
+                borderRadius: '100px',
+              }}
+            >
+              <Typography color="#CCCBCB" sx={{ fontSize: '12px' }}>
+                {products[0].is_sold ? 'Sold' : 'For Sale'}
+              </Typography>
+            </Box>
           </Card>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>

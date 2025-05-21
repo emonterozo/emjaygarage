@@ -36,7 +36,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <Box>
       <ProductComponent product={productData} />
-      <Products products={productsData} />
+      {productsData.length > 0 && <Products products={productsData} />}
       <Footer />
     </Box>
   );
