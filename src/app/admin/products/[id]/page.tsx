@@ -6,13 +6,7 @@ import Product from '@/model/Product';
 import { AdminProduct } from '@/components';
 import { Box } from '@mui/material';
 
-type AdminProductPreviewProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function AdminProductPreview({ params }: AdminProductPreviewProps) {
+export default async function AdminProductPreview({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {

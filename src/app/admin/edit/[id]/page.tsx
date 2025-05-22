@@ -7,13 +7,7 @@ import { UnitForm } from '@/components';
 import { Box } from '@mui/material';
 import { Product as TProduct } from '@/types/types';
 
-type AdminProductPreviewProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function AdminEditPage({ params }: AdminProductPreviewProps) {
+export default async function AdminEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {

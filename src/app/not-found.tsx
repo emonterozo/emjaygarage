@@ -21,16 +21,11 @@ export default function NotFound() {
       <Typography variant="body1" color="textSecondary" gutterBottom>
         Oops! The page you are looking for does not exist.
       </Typography>
-      {/* <Button
-        variant="contained"
-        color="primary"
-        component={Link}
-        to="/"
-        size="large"
-        sx={{ marginTop: '1rem' }}
-      >
-        Go to Home
-      </Button> */}
+      <Link href="/" passHref>
+        <Button variant="contained" color="primary" size="large" sx={{ marginTop: '1rem' }}>
+          Go to Home
+        </Button>
+      </Link>
     </Box>
   );
 }

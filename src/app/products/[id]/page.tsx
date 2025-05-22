@@ -5,13 +5,7 @@ import Product from '@/model/Product';
 import { Footer, Product as ProductComponent, Products } from '@/components';
 import { Box } from '@mui/material';
 
-type ProductPageProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the DATABASE_URL environment variable inside .env.local');
+  throw new Error('Please define the MONGODB_URI environment variable in .env.local');
 }
 
 interface MongooseCache {
@@ -11,12 +11,17 @@ interface MongooseCache {
   promise: Promise<typeof mongoose> | null;
 }
 
+// Extend globalThis with your cache type
 declare global {
-  // Extend the NodeJS global object to include mongoose
-  let mongoose: MongooseCache | undefined;
+  const mongooseCache: MongooseCache | undefined;
 }
 
-let cached: MongooseCache = (global.mongoose ??= { conn: null, promise: null });
+// Use globalThis for better type safety
+const globalWithCache = globalThis as typeof globalThis & {
+  mongooseCache?: MongooseCache;
+};
+
+const cached = (globalWithCache.mongooseCache ??= { conn: null, promise: null });
 
 async function connectDatabase() {
   if (cached.conn) {
@@ -28,10 +33,9 @@ async function connectDatabase() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => mongoose);
   }
+
   cached.conn = await cached.promise;
   return cached.conn;
 }
