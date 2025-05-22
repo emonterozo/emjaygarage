@@ -13,18 +13,16 @@ type AdminProductsProps = {
   products: Product[];
 };
 
-const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
-
 export default function AdminProducts({ products }: Readonly<AdminProductsProps>) {
   const theme = useTheme();
   const router = useRouter();
 
   const handlePressProduct = (id: string) => {
-    router.push(`/admin/products/${id}/${NEXT_PUBLIC_ADMIN_KEY}`);
+    router.push(`/admin/products/${id}/`);
   };
 
   const handlePressAdd = () => {
-    router.push(`/admin/add/${NEXT_PUBLIC_ADMIN_KEY}`);
+    router.push(`/admin/add`);
   };
 
   return (

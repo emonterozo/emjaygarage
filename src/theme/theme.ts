@@ -35,8 +35,14 @@ const theme = createTheme({
               borderColor: '#D9D9D9 !important', // Hover color
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#1976D2 !important', // Focused color
+              borderColor: '#1976D2 !important', // Focused color,
             },
+          },
+          '& .MuiInputLabel-root': {
+            color: '#D9D9D9',
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#D9D9D9', // ensure it stays the same when focused
           },
         },
       },

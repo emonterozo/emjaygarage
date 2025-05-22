@@ -12,6 +12,7 @@ import MUIProvider from './MUIProvider/MUIProvider';
 import FullScreenLoader from './FullScreenLoader/FullScreenLoader';
 import Dashboard from './Dashboard/Dashboard';
 import AppBar from './AppBar/AppBar';
+import Login from './Login/Login';
 
 export {
   Banner,
@@ -28,4 +29,5 @@ export {
   FullScreenLoader,
   Dashboard,
   AppBar,
+  Login,
 };

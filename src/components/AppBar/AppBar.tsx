@@ -17,9 +17,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { useRouter } from 'next/navigation';
 
-const pages = ['Home', 'Dashboard'];
-
-const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
+const pages = ['Home', 'Dashboard', 'View Emjay Garage'];
 
 const ResponsiveAppBar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -30,11 +28,11 @@ const ResponsiveAppBar = () => {
   };
 
   const handlePressItem = (page: string) => {
-    router.push(
-      page === 'Home'
-        ? `/admin/${NEXT_PUBLIC_ADMIN_KEY}`
-        : `/admin/dashboard/${NEXT_PUBLIC_ADMIN_KEY}`,
-    );
+    if (page === pages[2]) {
+      window.open('/', '_blank', 'noopener,noreferrer');
+    } else {
+      router.push(page === pages[0] ? `/admin/home` : `/admin/dashboard`);
+    }
   };
 
   const list = (
@@ -83,6 +81,7 @@ const ResponsiveAppBar = () => {
           </Box>
         </Toolbar>
       </AppBar>
+      <Toolbar />
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         {list}
       </Drawer>

@@ -183,8 +183,6 @@ type UnitFormProps = {
   data?: FormProps;
 };
 
-const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
-
 export default function UnitForm({ data }: Readonly<UnitFormProps>) {
   const theme = useTheme();
   const router = useRouter();
@@ -434,11 +432,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           message: `Vehicle has been ${data ? 'updated' : 'added'} successfully.`,
         });
 
-        router.push(
-          data
-            ? `/admin/products/${data._id}/${NEXT_PUBLIC_ADMIN_KEY}`
-            : `/admin/${NEXT_PUBLIC_ADMIN_KEY}`,
-        );
+        router.push(data ? `/admin/products/${data._id}/` : `/admin/home`);
       } else {
         setSnackbar({
           isOpen: true,
@@ -472,7 +466,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           isOpen: true,
           message: 'Vehicle has been deleted successfully.',
         });
-        router.push(`/admin/${NEXT_PUBLIC_ADMIN_KEY}`);
+        router.push(`/admin/home`);
       } else {
         setSnackbar({
           isOpen: true,

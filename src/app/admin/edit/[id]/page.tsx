@@ -10,14 +10,11 @@ import { Product as TProduct } from '@/types/types';
 type AdminProductPreviewProps = {
   params: {
     id: string;
-    key: string;
   };
 };
 
-const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
-
 export default async function AdminEditPage({ params }: AdminProductPreviewProps) {
-  const { id, key } = await params;
+  const { id } = await params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return notFound();
@@ -26,8 +23,6 @@ export default async function AdminEditPage({ params }: AdminProductPreviewProps
   await connectDatabase();
 
   const product = await Product.findById(id).lean();
-
-  if (key !== NEXT_PUBLIC_ADMIN_KEY || !product) return notFound();
 
   const data: TProduct = JSON.parse(JSON.stringify(product));
 

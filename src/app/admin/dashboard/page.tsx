@@ -1,21 +1,8 @@
 import React from 'react';
-import { notFound } from 'next/navigation';
 import Product from '@/model/Product';
 import { Dashboard } from '@/components';
 
-type DashboardPageProps = {
-  params: {
-    id: string;
-  };
-};
-
-const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
-
-export default async function DashboardPage({ params }: DashboardPageProps) {
-  const { id } = await params;
-
-  if (id !== NEXT_PUBLIC_ADMIN_KEY) return notFound();
-
+export default async function DashboardPage() {
   const totalUnits = await Product.countDocuments();
   const totalPublishedUnit = await Product.countDocuments({ is_active: true });
   const totalOwnUnits = await Product.countDocuments({ is_own_unit: true });

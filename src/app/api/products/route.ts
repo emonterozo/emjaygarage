@@ -17,7 +17,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     await connectDatabase();
 
     const body = await request.json();
-    console.log(body);
     await Product.create(body);
 
     return NextResponse.json({ message: 'New unit successfully added!' }, { status: 201 });
@@ -40,8 +39,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
     await Product.findByIdAndDelete(id);
 
     return NextResponse.json({ message: 'Product deleted successfully' }, { status: 200 });
-  } catch (err) {
-    console.log(err);
+  } catch {
     return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });
   }
 }

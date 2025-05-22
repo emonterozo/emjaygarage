@@ -8,8 +8,6 @@ import { DashboardItem } from '@/types/types';
 import { useRouter } from 'next/navigation';
 import { AppBar } from '..';
 
-const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
-
 type Summary = {
   label: string;
   value: number;
@@ -215,7 +213,7 @@ const Dashboard = ({ data, summary }: DashboardProps) => {
               renderCell: (params) => {
                 const handleClick = (e: React.MouseEvent) => {
                   e.stopPropagation();
-                  router.push(`/admin/products/${params.id}/${NEXT_PUBLIC_ADMIN_KEY}`);
+                  router.push(`/admin/products/${params.id}`);
                 };
 
                 return (

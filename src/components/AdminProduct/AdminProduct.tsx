@@ -8,7 +8,6 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import Product, { ProductProps } from '../Product/Product';
 import { AppBar } from '..';
-const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
 
 const columns: GridColDef[] = [
   {
@@ -39,7 +38,7 @@ export default function AdminProduct({ product }: Readonly<ProductProps>) {
   const router = useRouter();
 
   const handlePressEdit = () => {
-    router.push(`/admin/edit/${product._id}/${NEXT_PUBLIC_ADMIN_KEY}`);
+    router.push(`/admin/edit/${product._id}`);
   };
 
   return (
