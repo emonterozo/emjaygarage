@@ -105,6 +105,7 @@ export default function Contact() {
                 xs: '14px',
                 md: '16px',
               },
+              fontFamily: 'Centauri',
             }}
           >
             {`Let's Talk!`}
@@ -116,6 +117,7 @@ export default function Contact() {
                 xs: '22px',
                 md: '40px',
               },
+              fontFamily: 'Centauri',
             }}
           >
             Contact Us
@@ -139,7 +141,7 @@ export default function Contact() {
             <Grid container spacing={3} sx={{ marginTop: '32px' }}>
               {/* Name */}
               <Grid size={{ xs: 12, md: 6 }}>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#D9D9D9" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                   Name
                 </Typography>
                 <TextField
@@ -154,7 +156,7 @@ export default function Contact() {
 
               {/* Phone */}
               <Grid size={{ xs: 12, md: 6 }}>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#D9D9D9" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                   Phone
                 </Typography>
                 <TextField
@@ -170,7 +172,7 @@ export default function Contact() {
 
               {/* Email */}
               <Grid size={12}>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#D9D9D9" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                   Email
                 </Typography>
                 <TextField
@@ -186,7 +188,7 @@ export default function Contact() {
 
               {/* Message */}
               <Grid size={12}>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#D9D9D9" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                   Message
                 </Typography>
                 <TextField
@@ -204,7 +206,12 @@ export default function Contact() {
 
               {/* Submit Button */}
               <Grid size={12} display="flex" justifyContent="start">
-                <Button type="submit" variant="contained" color="secondary" sx={{ width: '30%' }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  sx={{ width: '30%', fontFamily: 'Centauri' }}
+                >
                   Send
                 </Button>
               </Grid>

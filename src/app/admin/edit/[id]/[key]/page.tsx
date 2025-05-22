@@ -31,6 +31,12 @@ export default async function AdminEditPage({ params }: AdminProductPreviewProps
 
   const data: TProduct = JSON.parse(JSON.stringify(product));
 
+  const terms = data.financing_details.terms.map((item) => ({
+    months: item.term.toString(),
+    amount: item.amount.toString(),
+    _id: item._id,
+  }));
+
   return (
     <Box>
       <UnitForm
@@ -43,7 +49,7 @@ export default async function AdminEditPage({ params }: AdminProductPreviewProps
           detail: '',
           details: data.details,
           downpayment: data.financing_details.down_payment.toString(),
-          financingOptions: [],
+          financingOptions: terms,
           purchasePrice: data.purchase_price.toString(),
           soldAmount: data.sold_price.toString(),
           salesIncentive: data.sales_incentive.toString(),
@@ -59,8 +65,8 @@ export default async function AdminEditPage({ params }: AdminProductPreviewProps
           expenseDescription: '',
           expenseAmount: '0',
           expenseCategory: 'Operating',
-          dateAcquired: data.date_acquired === null ? undefined : data.date_acquired,
-          dateSold: data.date_sold === null ? undefined : data.date_sold,
+          dateAcquired: data.date_acquired === null ? undefined : data.date_acquired.toString(),
+          dateSold: data.date_sold === null ? undefined : data.date_sold.toString(),
         }}
       />
     </Box>

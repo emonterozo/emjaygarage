@@ -53,6 +53,7 @@ export default function WhyChooseUs() {
               md: '40px',
             },
             color: '#D9D9D9',
+            fontFamily: 'Centauri',
           }}
         >
           Why Choose Us
@@ -60,13 +61,14 @@ export default function WhyChooseUs() {
         <Typography
           sx={{
             fontSize: {
-              xs: '12px',
-              md: '16px',
+              xs: '14px',
+              md: '20px',
             },
             color: '#D9D9D9',
           }}
         >
-          Your satisfaction drives us forward
+          Committed to delivering value, transparency, and customer satisfaction every step of the
+          way.
         </Typography>
       </Box>
       <Grid container spacing={2} marginTop="57px">
@@ -90,6 +92,7 @@ export default function WhyChooseUs() {
                     md: '16px',
                   },
                   textAlign: 'center',
+                  fontFamily: 'Centauri',
                 }}
               >
                 {item.title}

@@ -47,7 +47,6 @@ export default function Footer() {
   const router = useRouter();
 
   const onClick = (title: string, path: string) => {
-    console.log('dasd', title, path);
     if (title === 'Navigation') {
       router.push(path);
     } else {
@@ -86,6 +85,7 @@ export default function Footer() {
                   md: '16px',
                 },
                 color: '#D9D9D9',
+                fontFamily: 'Centauri',
               }}
             >
               Emjay Garage
@@ -122,6 +122,7 @@ export default function Footer() {
                     md: '16px',
                   },
                   color: '#D9D9D9',
+                  fontFamily: 'Centauri',
                 }}
               >
                 {option.title}
@@ -142,6 +143,7 @@ export default function Footer() {
                         md: '12px',
                       },
                       color: '#9B9B9B',
+                      fontFamily: 'Centauri',
                       cursor: 'pointer',
                       '&:hover': { color: '#FFFFFF' },
                     }}

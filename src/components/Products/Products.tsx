@@ -54,20 +54,22 @@ export default function Products({ products }: Readonly<ProductsProps>) {
               md: '40px',
             },
             color: '#D9D9D9',
+            fontFamily: 'Centauri',
           }}
         >
-          OTHER UNITS YOU MIGHT LIKE
+          OTHER UNITS
         </Typography>
         <Typography
           sx={{
             fontSize: {
-              xs: '12px',
-              md: '16px',
+              xs: '14px',
+              md: '20px',
             },
             color: '#D9D9D9',
           }}
         >
-          {`Discover more items you'll love`}
+          Browse a diverse range of additional vehicles suited for different needs, from utility to
+          leisure.
         </Typography>
       </Box>
       <Grid container paddingTop="57px">
@@ -145,10 +147,10 @@ export default function Products({ products }: Readonly<ProductsProps>) {
                         gap: '10px',
                       }}
                     >
-                      <Typography color="#FFFFFF" sx={{ fontSize: '12px' }}>
+                      <Typography color="#FFFFFF" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                         {product.name}
                       </Typography>
-                      <Typography color="#CCCBCB" sx={{ fontSize: '12px' }}>
+                      <Typography color="#CCCBCB" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                         {`₱ ${product.price.toLocaleString()}`}
                       </Typography>
                     </Box>
@@ -164,7 +166,7 @@ export default function Products({ products }: Readonly<ProductsProps>) {
                       borderRadius: '100px',
                     }}
                   >
-                    <Typography color="#CCCBCB" sx={{ fontSize: '12px' }}>
+                    <Typography color="#CCCBCB" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                       {product.is_sold ? 'Sold' : 'For Sale'}
                     </Typography>
                   </Box>

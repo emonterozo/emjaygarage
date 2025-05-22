@@ -16,7 +16,7 @@ export default async function AdminPage({ params }: AdminPageProps) {
 
   if (id !== NEXT_PUBLIC_ADMIN_KEY) return notFound();
 
-  const products = await Product.find({}).sort({ is_sold: 1 }).lean();
+  const products = await Product.find({}).sort({ is_sold: 1, name: 1 }).lean();
 
   const data = JSON.parse(JSON.stringify(products));
 

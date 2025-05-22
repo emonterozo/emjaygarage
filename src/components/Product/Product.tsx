@@ -66,6 +66,7 @@ export default function Product({ product }: Readonly<ProductProps>) {
                       xs: '22px',
                       md: '40px',
                     },
+                    fontFamily: 'Centauri',
                   }}
                 >
                   {product?.name}
@@ -77,9 +78,10 @@ export default function Product({ product }: Readonly<ProductProps>) {
                       xs: '18px',
                       md: '20px',
                     },
+                    fontFamily: 'Centauri',
                   }}
                 >
-                  {` ₱ ${product.price.toLocaleString()}`}
+                  {`₱ ${product.price.toLocaleString()}`}
                 </Typography>
               </Box>
 
@@ -103,6 +105,7 @@ export default function Product({ product }: Readonly<ProductProps>) {
                       xs: '18px',
                       md: '20px',
                     },
+                    fontFamily: 'Centauri',
                   }}
                 >
                   Specifications
@@ -137,6 +140,7 @@ export default function Product({ product }: Readonly<ProductProps>) {
                           xs: '18px',
                           md: '20px',
                         },
+                        fontFamily: 'Centauri',
                       }}
                     >
                       Financing Details

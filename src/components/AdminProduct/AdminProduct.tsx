@@ -1,12 +1,38 @@
 'use client';
 
 import React from 'react';
-import { Box, Divider, Fab, List, ListItem, Typography, useTheme } from '@mui/material';
+import { Box, Fab, Typography, useTheme } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/navigation';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import Product, { ProductProps } from '../Product/Product';
+import { AppBar } from '..';
 const NEXT_PUBLIC_ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY;
+
+const columns: GridColDef[] = [
+  {
+    field: 'description',
+    headerName: 'Expenses',
+    flex: 2,
+  },
+  {
+    field: 'category',
+    headerName: 'Category',
+    flex: 2,
+    valueFormatter: (params: string) => `${params} Expenses`,
+  },
+  {
+    field: 'amount',
+    headerName: 'Amount',
+    flex: 1,
+    valueFormatter: (params: number) =>
+      `₱ ${params.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`,
+  },
+];
 
 export default function AdminProduct({ product }: Readonly<ProductProps>) {
   const theme = useTheme();
@@ -18,6 +44,7 @@ export default function AdminProduct({ product }: Readonly<ProductProps>) {
 
   return (
     <Box>
+      <AppBar />
       <Product product={product} />
       <Box
         sx={{
@@ -41,6 +68,7 @@ export default function AdminProduct({ product }: Readonly<ProductProps>) {
                 md: '40px',
               },
               color: '#D9D9D9',
+              fontFamily: 'Centauri',
             }}
           >
             Unit Summary
@@ -54,126 +82,115 @@ export default function AdminProduct({ product }: Readonly<ProductProps>) {
               color: '#D9D9D9',
             }}
           >
-            Overview of purchase cost, related expenses, and final sale amount
+            Overview of purchase cost, related expenses, and final sale amount.
           </Typography>
         </Box>
-
-        <Box
-          sx={{
-            p: {
-              xs: 2,
-              md: 4,
+        <DataGrid
+          rows={product.expenses}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 25 },
             },
-            backgroundColor: '#1A1A1A',
-            borderRadius: 2,
-            marginTop: '57px',
           }}
-        >
-          <Box display="flex" flexDirection="column" gap={3}>
-            {[
-              { label: 'Purchase Price', value: product.purchase_price },
-              { label: 'Sold Amount', value: product.sold_price },
-              { label: 'Agent Commission', value: product.sales_incentive },
-            ].map((item) => (
-              <Box key={item.label}>
-                <Typography
-                  sx={{
-                    fontSize: {
-                      xs: '16px',
-                      md: '20px',
-                    },
-                    color: '#FFB22C',
-                  }}
-                >
-                  {item.label}
+          hideFooterPagination
+          pageSizeOptions={[25]}
+          disableRowSelectionOnClick
+          disableColumnSelector
+          sx={{
+            mt: 5,
+            color: theme.palette.secondary.main,
+            borderColor: theme.palette.secondary.main,
+            backgroundColor: '#121212',
+            '& .MuiDataGrid-row:hover': {
+              backgroundColor: '#1a1a1a',
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: theme.palette.secondary.light,
+            },
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.primary.main,
+              fontWeight: 'bold',
+            },
+            '.MuiDataGrid-columnSeparator': {
+              color: theme.palette.primary.main,
+            },
+            '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within': {
+              outline: 'none',
+              boxShadow: 'none',
+            },
+            '& .MuiDataGrid-columnHeader.MuiDataGrid-columnHeader--sorted': {
+              outline: 'none',
+              boxShadow: 'none',
+            },
+            '& .MuiDataGrid-footerContainer': {
+              color: theme.palette.secondary.main,
+            },
+            '& .MuiTablePagination-root': {
+              color: theme.palette.secondary.main,
+            },
+            '& .MuiIconButton-root': {
+              color: theme.palette.secondary.main,
+              '&:hover': {
+                color: theme.palette.secondary.main,
+              },
+            },
+          }}
+          getRowId={(row) => row._id}
+          slots={{
+            footer: () => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderTop: `1px solid ${theme.palette.secondary.main}`,
+                  px: 5,
+                  py: 2,
+                }}
+              >
+                <Typography variant="subtitle1" color="white">
+                  {`Total Expenses: ₱ ${product.total_expenses.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`}
                 </Typography>
-                <Typography
-                  sx={{
-                    fontSize: {
-                      xs: '16px',
-                      md: '20px',
-                    },
-                    color: '#D9D9D9',
-                    mt: '5px',
-                  }}
-                >
-                  ₱ {item.value.toLocaleString()}
+                <Typography variant="subtitle1" color="white">
+                  {`Selling Price: ₱ ${product.sold_price.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`}
+                </Typography>
+                <Typography variant="subtitle1" color="white">
+                  {`Total Profit: ₱ ${product.profit.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`}
+                </Typography>
+                <Typography variant="subtitle1" color="white">
+                  {`Percentage: ${product.percentage}%`}
                 </Typography>
               </Box>
-            ))}
-            <Box>
-              <>
-                <Typography
-                  sx={{
-                    fontSize: {
-                      xs: '18px',
-                      md: '20px',
-                    },
-                    color: '#FFB22C',
-                  }}
-                >
-                  Expenses
+            ),
+            noRowsOverlay: () => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '100%',
+                }}
+              >
+                <Typography variant="subtitle1" color="white">
+                  No available data
                 </Typography>
-                <List dense>
-                  {product.expenses.map((item) => (
-                    <ListItem key={item._id} disablePadding sx={{ marginTop: '3px' }}>
-                      <Typography
-                        sx={{
-                          color: '#D9D9D9',
-                          fontSize: {
-                            xs: '16px',
-                            md: '20px',
-                          },
-                          flex: 1,
-                          fontFamily: 'Poppins',
-                        }}
-                      >
-                        {item.description}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: '#D9D9D9',
-                          fontSize: {
-                            xs: '16px',
-                            md: '20px',
-                          },
-                          fontFamily: 'Poppins',
-                        }}
-                      >
-                        ₱ {item.amount.toLocaleString()}
-                      </Typography>
-                    </ListItem>
-                  ))}
-                </List>
-              </>
-              <Divider sx={{ borderColor: '#333', my: 1 }} />
-              <Box display="flex" justifyContent="space-between" mt={2}>
-                <Typography
-                  sx={{
-                    color: '#FFB22C',
-                    fontSize: {
-                      xs: '16px',
-                      md: '20px',
-                    },
-                  }}
-                >
-                  Total Expenses
-                </Typography>
-                <Typography
-                  sx={{
-                    color: '#f0e9e9',
-                    fontSize: {
-                      xs: '16px',
-                      md: '20px',
-                    },
-                  }}
-                >{`₱ ${product.total_expenses.toLocaleString()}`}</Typography>
               </Box>
-            </Box>
-          </Box>
-        </Box>
+            ),
+          }}
+        />
       </Box>
-
       <Fab
         variant="extended"
         color="secondary"

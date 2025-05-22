@@ -42,6 +42,7 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
               md: '40px',
             },
             color: '#D9D9D9',
+            fontFamily: 'Centauri',
           }}
         >
           Car Catalog
@@ -49,13 +50,13 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
         <Typography
           sx={{
             fontSize: {
-              xs: '12px',
-              md: '16px',
+              xs: '14px',
+              md: '20px',
             },
             color: '#D9D9D9',
           }}
         >
-          Explore our Cars you might like!
+          Browse our selection of quality pre-owned vehicles tailored to your lifestyle and budget.
         </Typography>
       </Box>
       <Grid container spacing={2} paddingTop="57px">
@@ -111,7 +112,7 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
                 >
                   {products[0].description}
                 </Typography>
-                <Typography color="#D9D9D9" sx={{ fontSize: '24px' }}>
+                <Typography color="#D9D9D9" sx={{ fontSize: '24px', fontFamily: 'Centauri' }}>
                   {`₱ ${products[0].price.toLocaleString()}`}
                 </Typography>
               </Box>
@@ -127,7 +128,7 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
                 borderRadius: '100px',
               }}
             >
-              <Typography color="#CCCBCB" sx={{ fontSize: '12px' }}>
+              <Typography color="#CCCBCB" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                 {products[0].is_sold ? 'Sold' : 'For Sale'}
               </Typography>
             </Box>
@@ -174,10 +175,10 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
                         gap: '10px',
                       }}
                     >
-                      <Typography color="#FFFFFF" sx={{ fontSize: '12px' }}>
+                      <Typography color="#FFFFFF" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                         {product.name}
                       </Typography>
-                      <Typography color="#CCCBCB" sx={{ fontSize: '12px' }}>
+                      <Typography color="#CCCBCB" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                         {`₱ ${product.price.toLocaleString()}`}
                       </Typography>
                     </Box>
@@ -193,7 +194,7 @@ export default function Catalog({ products }: Readonly<CatalogProps>) {
                       borderRadius: '100px',
                     }}
                   >
-                    <Typography color="#CCCBCB" sx={{ fontSize: '12px' }}>
+                    <Typography color="#CCCBCB" sx={{ fontSize: '12px', fontFamily: 'Centauri' }}>
                       {product.is_sold ? 'Sold' : 'For Sale'}
                     </Typography>
                   </Box>

@@ -17,6 +17,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     await connectDatabase();
 
     const body = await request.json();
+    console.log(body);
     await Product.create(body);
 
     return NextResponse.json({ message: 'New unit successfully added!' }, { status: 201 });

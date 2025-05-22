@@ -25,10 +25,13 @@ import 'react-photo-view/dist/react-photo-view.css';
 import { storage } from '@/lib/firebase';
 import FullScreenLoader from '../FullScreenLoader/FullScreenLoader';
 import { useRouter } from 'next/navigation';
+import { differenceInDays } from 'date-fns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 type FinancingDetails = {
   months: string;
   amount: string;
+  _id?: string;
 };
 
 type Expense = {
@@ -62,8 +65,8 @@ type FormProps = {
   expenseDescription: string;
   expenseAmount: string;
   expenseCategory: string;
-  dateAcquired: Date | undefined;
-  dateSold: Date | undefined;
+  dateAcquired?: string;
+  dateSold?: string;
 };
 
 type TextFieldProps = {
@@ -214,6 +217,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
       dateSold: undefined,
     },
   );
+
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
     message: '',
@@ -341,7 +345,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
 
   const saveUnit = async () => {
     setIsLoading(true);
-    let expenses = [];
+    let expenses: Expense[] = [...form.expenses];
 
     if (parseInt(form.purchasePrice, 10) > 0) {
       expenses.push({
@@ -349,6 +353,8 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         amount: form.purchasePrice,
         category: 'Operating',
       });
+    } else {
+      expenses = expenses.filter((item) => item.description !== 'Cost of Unit');
     }
 
     if (parseInt(form.salesIncentive, 10) > 0) {
@@ -357,11 +363,21 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         amount: form.salesIncentive,
         category: 'Operating',
       });
+    } else {
+      expenses = expenses.filter((item) => item.description !== 'Sales Incentive');
     }
 
-    expenses = [...expenses, ...form.expenses];
+    const uniqueExpenses = Object.values(
+      expenses.reduce(
+        (acc, curr) => {
+          acc[curr.description] = curr;
+          return acc;
+        },
+        {} as Record<string, (typeof expenses)[number]>,
+      ),
+    ).sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount));
 
-    const totalExpenses = expenses.reduce((sum, expense) => {
+    const totalExpenses = uniqueExpenses.reduce((sum, expense) => {
       return sum + parseFloat(expense.amount || '0');
     }, 0);
 
@@ -369,6 +385,10 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
       term: parseInt(item.months, 0),
       amount: parseFloat(item.amount).toFixed(2),
     }));
+
+    const profit = parseFloat(form.soldAmount) - totalExpenses;
+    const percentage = Math.round((profit / totalExpenses) * 100);
+    const days = differenceInDays(new Date(form.dateSold!), new Date(form.dateAcquired!));
 
     const payload = {
       _id: form._id,
@@ -387,13 +407,16 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
       is_sold: form.isSold === 'true',
       is_active: form.isActive === 'true',
       purchase_price: form.purchasePrice === '' ? '0' : form.purchasePrice,
-      expenses: expenses,
+      expenses: uniqueExpenses,
       total_expenses: totalExpenses,
       sold_price: form.soldAmount === '' ? '0' : form.soldAmount,
       sales_incentive: form.salesIncentive === '' ? '0' : form.salesIncentive,
       date_acquired: form.dateAcquired ?? null,
       date_sold: form.dateSold ?? null,
       acquired_city: form.acquiredCity,
+      profit: profit,
+      percentage: isNaN(percentage) ? 0 : percentage,
+      days_on_hold: isNaN(days) ? 0 : days,
     };
 
     try {
@@ -478,7 +501,6 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           md: '70px',
         },
         backgroundColor: theme.palette.primary.main,
-        color: theme.palette.secondary.main,
       }}
     >
       {isLoading && <FullScreenLoader />}
@@ -488,7 +510,8 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
             xs: '22px',
             md: '40px',
           },
-          color: '#D9D9D9',
+          color: '#ffffff',
+          fontFamily: 'Centauri',
         }}
       >
         {data ? 'Edit Unit' : 'Add New Unit'}
@@ -497,7 +520,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
       <Box sx={{ marginTop: '57px', display: 'flex', flexDirection: 'column', gap: 3 }}>
         {UNIT_DETAILS.map((item) => (
           <Box key={item.key}>
-            <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+            <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
               {item.label}
             </Typography>
             <TextField
@@ -518,7 +541,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           </Box>
         ))}
         <Box>
-          <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+          <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
             Details
           </Typography>
           <Box
@@ -585,7 +608,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           </Box>
         </Box>
         <Box>
-          <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+          <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
             Downpayment
           </Typography>
           <TextField
@@ -604,13 +627,13 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         </Box>
         <Divider sx={{ borderColor: '#333', my: 1 }} />
         <Box>
-          <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+          <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
             Financing Options:
           </Typography>
           <Grid container spacing={1} mt={2}>
             <Grid size={6}>
               <Box>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
                   Months
                 </Typography>
                 <TextField
@@ -630,7 +653,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
             </Grid>
             <Grid size={6}>
               <Box>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
                   Amount
                 </Typography>
                 <TextField
@@ -652,7 +675,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               startIcon={<AddIcon />}
-              sx={{ mt: 2, backgroundColor: theme.palette.secondary.main }}
+              sx={{ mt: 2, backgroundColor: theme.palette.secondary.main, fontSize: '16px' }}
               disabled={
                 form.financingMonths.toString() === '0' ||
                 form.financingMonths.toString() === '' ||
@@ -694,7 +717,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         </Box>
         {UNIT_OTHER_DETAILS.map((item) => (
           <Box key={item.label}>
-            <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+            <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
               {item.label}
             </Typography>
             <TextField
@@ -713,29 +736,47 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           </Box>
         ))}
         {DATES.map((item) => (
-          <Box key={item.key}>
-            <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+          <Box key={item.key} flex={1}>
+            <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
               {item.label}
             </Typography>
-            <TextField
-              type="date"
-              fullWidth
-              variant="outlined"
-              margin="normal"
-              value={form[item.key]}
-              onChange={(event) => handleTextFieldChange(item.key, event)}
+            <DatePicker
+              value={form[item.key] ? new Date(form[item.key] as string) : null}
+              onChange={(value) => setForm({ ...form, [item.key]: value })}
+              slotProps={{
+                actionBar: {
+                  actions: ['clear'], // shows "Clear" button in the calendar popup
+                },
+                textField: {
+                  InputProps: {
+                    sx: {
+                      color: '#D9D9D9',
+                      '& .MuiSvgIcon-root': {
+                        color: '#D9D9D9',
+                      },
+                    },
+                  },
+                  sx: {
+                    border: '1px solid #D9D9D9',
+                    borderRadius: '4px',
+                    width: '100%',
+                    marginY: '16px',
+                  },
+                },
+              }}
             />
           </Box>
         ))}
+
         <Divider sx={{ borderColor: '#333', my: 1 }} />
         <Box>
-          <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+          <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
             Unit Expenses:
           </Typography>
           <Grid container spacing={1} mt={2}>
             <Grid size={4}>
               <Box>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
                   Description
                 </Typography>
                 <TextField
@@ -749,7 +790,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
             </Grid>
             <Grid size={4}>
               <Box>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
                   Amount
                 </Typography>
                 <TextField
@@ -769,7 +810,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
             </Grid>
             <Grid size={4}>
               <Box>
-                <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+                <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
                   Category
                 </Typography>
                 <Select
@@ -818,7 +859,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               startIcon={<AddIcon />}
-              sx={{ mt: 2, backgroundColor: theme.palette.secondary.main }}
+              sx={{ mt: 2, backgroundColor: theme.palette.secondary.main, fontSize: '16px' }}
               disabled={
                 form.expenseDescription === '' ||
                 form.expenseAmount.toString() === '0' ||
@@ -861,7 +902,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         </Box>
         {SELECTIONS.map((item) => (
           <Box key={item.label}>
-            <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+            <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
               {item.label}
             </Typography>
             <Select
@@ -903,7 +944,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           </Box>
         ))}
         <Box>
-          <Typography color="#D9D9D9" sx={{ fontSize: '12px' }}>
+          <Typography color="#ffffff" sx={{ fontSize: '18px' }}>
             Images
           </Typography>
 
@@ -911,6 +952,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
             <Button
               startIcon={<AddIcon />}
               sx={{
+                fontSize: '16px',
                 mt: 2,
                 backgroundColor: theme.palette.secondary.main,
               }}
@@ -967,6 +1009,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
             fullWidth
             sx={{
               backgroundColor: theme.palette.secondary.main,
+              fontSize: '16px',
             }}
             onClick={saveUnit}
           >

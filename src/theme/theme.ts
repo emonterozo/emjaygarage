@@ -13,7 +13,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Centauri, sans-serif',
+    fontFamily: 'Poppins, Centauri, sans-serif',
   },
   components: {
     MuiTextField: {
@@ -38,13 +38,6 @@ const theme = createTheme({
               borderColor: '#1976D2 !important', // Focused color
             },
           },
-        },
-      },
-    },
-    MuiFormHelperText: {
-      styleOverrides: {
-        root: {
-          fontFamily: 'Poppins',
         },
       },
     },

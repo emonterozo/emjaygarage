@@ -37,4 +37,22 @@ export type Product = {
   date_acquired: Date;
   date_sold: Date;
   acquired_city: string;
+  profit: number;
+  percentage: number;
+  days_on_hold: number;
+};
+
+export type DashboardItem = {
+  _id: string;
+  name: string;
+  plate: string;
+  total_expenses: number;
+  sold_price: number;
+  profit: number;
+  percentage: number;
+  days_on_hold: number;
+  is_sold: boolean;
+  is_active: boolean;
+  date_acquired: Date;
+  date_sold: Date;
 };

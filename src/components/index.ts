@@ -10,6 +10,8 @@ import AdminProduct from './AdminProduct/AdminProduct';
 import UnitForm from './UnitForm/UnitForm';
 import MUIProvider from './MUIProvider/MUIProvider';
 import FullScreenLoader from './FullScreenLoader/FullScreenLoader';
+import Dashboard from './Dashboard/Dashboard';
+import AppBar from './AppBar/AppBar';
 
 export {
   Banner,
@@ -24,4 +26,6 @@ export {
   UnitForm,
   MUIProvider,
   FullScreenLoader,
+  Dashboard,
+  AppBar,
 };
