@@ -22,16 +22,23 @@ const columns: GridColDef[] = [
   {
     field: 'is_active',
     headerName: 'Visibility',
-    flex: 0.7,
-    valueFormatter: (params: boolean) => (params ? 'Published' : 'Unpublished'),
+    flex: 0.9,
+    renderCell: (params) => (
+      <span style={{ color: params.value ? '#D9D9D9' : '#F44336' }}>
+        {params.value ? 'Published' : 'Unpublished'}
+      </span>
+    ),
   },
   {
     field: 'is_sold',
     headerName: 'Status',
     flex: 0.7,
-    valueFormatter: (params: boolean) => (params ? 'Sold' : 'For Sale'),
+    renderCell: (params) => (
+      <span style={{ color: params.value ? '#4CAF50' : '#D9D9D9' }}>
+        {params.value ? 'Sold' : 'For Sale'}
+      </span>
+    ),
   },
-
   {
     field: 'plate',
     headerName: 'Plate #',

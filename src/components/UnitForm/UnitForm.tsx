@@ -219,6 +219,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
     message: '',
+    type: 'success',
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -258,11 +259,13 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         setSnackbar({
           isOpen: true,
           message: 'Successfully uploaded product images.',
+          type: 'success',
         });
       } catch {
         setSnackbar({
           isOpen: true,
           message: 'Error occurred uploading product image.',
+          type: 'error',
         });
       } finally {
         setIsLoading(false);
@@ -306,12 +309,14 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           setSnackbar({
             isOpen: true,
             message: 'Successfully deleted product image.',
+            type: 'success',
           });
         })
         .catch(() => {
           setSnackbar({
             isOpen: true,
             message: 'Error occurred deleting product image.',
+            type: 'error',
           });
         });
     }
@@ -430,6 +435,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         setSnackbar({
           isOpen: true,
           message: `Vehicle has been ${data ? 'updated' : 'added'} successfully.`,
+          type: 'success',
         });
 
         router.push(data ? `/admin/products/${data._id}/` : `/admin/home`);
@@ -437,12 +443,14 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         setSnackbar({
           isOpen: true,
           message: `Failed to ${data ? 'updated' : 'added'} vehicle. Please try again later.`,
+          type: 'error',
         });
       }
     } catch {
       setSnackbar({
         isOpen: true,
         message: `Failed to ${data ? 'updated' : 'added'} vehicle. Please try again later.`,
+        type: 'error',
       });
     } finally {
       setIsLoading(false);
@@ -465,18 +473,21 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         setSnackbar({
           isOpen: true,
           message: 'Vehicle has been deleted successfully.',
+          type: 'success',
         });
         router.push(`/admin/home`);
       } else {
         setSnackbar({
           isOpen: true,
           message: 'Failed to delete vehicle. Please try again later.',
+          type: 'error',
         });
       }
     } catch {
       setSnackbar({
         isOpen: true,
         message: 'Failed to delete vehicle. Please try again later.',
+        type: 'error',
       });
     } finally {
       setIsLoading(false);
@@ -1031,12 +1042,17 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           setSnackbar({
             isOpen: false,
             message: '',
+            type: 'success',
           });
         }}
         message={snackbar.message}
         slotProps={{
           content: {
-            sx: { backgroundColor: '#4BB543', fontFamily: 'Poppins' },
+            sx: {
+              backgroundColor:
+                snackbar.type === 'success' ? theme.palette.success.main : theme.palette.error.main,
+              fontFamily: 'Poppins',
+            },
           },
         }}
       />

@@ -159,7 +159,10 @@ export default function Login() {
         message={snackbar.message}
         slotProps={{
           content: {
-            sx: { backgroundColor: '#4BB543', fontFamily: 'Poppins' },
+            sx: {
+              backgroundColor: theme.palette.error.main,
+              fontFamily: 'Poppins',
+            },
           },
         }}
       />

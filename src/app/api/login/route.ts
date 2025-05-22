@@ -13,14 +13,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const user = await Account.findOne({ username: body.username });
 
     if (!user)
-      return NextResponse.json({ message: 'Incorrect username or password' }, { status: 401 });
+      return NextResponse.json({ message: 'Incorrect username or password.' }, { status: 401 });
 
     const isMatch = await bcrypt.compare(body.password, user.password);
 
-    console.log(isMatch);
-
     if (!isMatch) {
-      return NextResponse.json({ message: 'Incorrect username or password' }, { status: 401 });
+      return NextResponse.json({ message: 'Incorrect username or password.' }, { status: 401 });
     }
 
     const cookie = serialize('auth', 'true', {
