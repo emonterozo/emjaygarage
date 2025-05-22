@@ -1,10 +1,10 @@
 import React from 'react';
 import Product from '@/model/Product';
 import { Dashboard } from '@/components';
-
-export const dynamic = 'force-dynamic';
+import connectDatabase from '@/lib/connectDatabase';
 
 export default async function DashboardPage() {
+  await connectDatabase();
   const totalUnits = await Product.countDocuments();
   const totalPublishedUnit = await Product.countDocuments({ is_active: true });
   const totalOwnUnits = await Product.countDocuments({ is_own_unit: true });
