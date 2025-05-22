@@ -6,6 +6,8 @@ import Product from '@/model/Product';
 import { AdminProduct } from '@/components';
 import { Box } from '@mui/material';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminProductPreview({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 

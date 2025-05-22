@@ -7,6 +7,8 @@ import { UnitForm } from '@/components';
 import { Box } from '@mui/material';
 import { Product as TProduct } from '@/types/types';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 

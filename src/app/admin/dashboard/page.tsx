@@ -2,6 +2,8 @@ import React from 'react';
 import Product from '@/model/Product';
 import { Dashboard } from '@/components';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   const totalUnits = await Product.countDocuments();
   const totalPublishedUnit = await Product.countDocuments({ is_active: true });
