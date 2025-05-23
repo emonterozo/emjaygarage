@@ -7,10 +7,10 @@ const protectedPaths = [
   '/admin/add',
   '/admin/products',
   '/admin/edit',
-]; // example protected routes
+];
 
 export function middleware(request: NextRequest) {
-  const authCookie = request.cookies.get('auth');
+  const authCookie = request.cookies.get('auth_user_id');
 
   const isProtectedRoute = protectedPaths.some((path) => request.nextUrl.pathname.startsWith(path));
 

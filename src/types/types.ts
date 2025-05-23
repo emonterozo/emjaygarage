@@ -56,3 +56,9 @@ export type DashboardItem = {
   date_acquired: Date;
   date_sold: Date;
 };
+
+export type Account = {
+  username: string;
+  password: string;
+  type: string;
+};
