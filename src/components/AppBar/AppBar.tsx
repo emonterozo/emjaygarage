@@ -16,10 +16,12 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useRouter } from 'next/navigation';
+import { useAppStore } from '@/store/useAppStore';
 
 const pages = ['Home', 'Dashboard', 'View Emjay Garage'];
 
 const ResponsiveAppBar = () => {
+  const user = useAppStore((state) => state.user);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const router = useRouter();
 
@@ -70,7 +72,7 @@ const ResponsiveAppBar = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Emjay Garage
+            {`Emjay Garage${user?.type === 'GUEST' ? ' (Guest)' : ''}`}
           </Typography>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
             {pages.map((page) => (

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '@/theme/theme';
-import { MUIProvider } from '@/components';
+import { AuthInitializer, MUIProvider } from '@/components';
 
 import './globals.css';
 
@@ -19,11 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <MUIProvider>
-          <AppRouterCacheProvider>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
-          </AppRouterCacheProvider>
-        </MUIProvider>
+        <AuthInitializer>
+          <MUIProvider>
+            <AppRouterCacheProvider>
+              <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            </AppRouterCacheProvider>
+          </MUIProvider>
+        </AuthInitializer>
       </body>
     </html>
   );

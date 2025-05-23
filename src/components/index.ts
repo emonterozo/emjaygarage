@@ -13,6 +13,7 @@ import FullScreenLoader from './FullScreenLoader/FullScreenLoader';
 import Dashboard from './Dashboard/Dashboard';
 import AppBar from './AppBar/AppBar';
 import Login from './Login/Login';
+import AuthInitializer from './AuthInitializer/AuthInitializer';
 
 export {
   Banner,
@@ -30,4 +31,5 @@ export {
   Dashboard,
   AppBar,
   Login,
+  AuthInitializer,
 };

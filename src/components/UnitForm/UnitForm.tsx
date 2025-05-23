@@ -183,6 +183,8 @@ type UnitFormProps = {
   data?: FormProps;
 };
 
+const environment = process.env.NEXT_PUBLIC_ENV;
+
 export default function UnitForm({ data }: Readonly<UnitFormProps>) {
   const theme = useTheme();
   const router = useRouter();
@@ -232,13 +234,11 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
       setIsLoading(true);
       const files = (event.target as HTMLInputElement).files;
       if (!files) return;
-
       const selectedFiles = Array.from(files);
-
       const uploadPromises = selectedFiles.map((file) => {
-        const fileRef = ref(storage, Date.now().toString());
+        const env = environment === 'production' ? 'prd' : 'stg';
+        const fileRef = ref(storage, `${env}/${Date.now().toString()}`);
         const uploadTask = uploadBytesResumable(fileRef, file);
-
         return new Promise<string>((resolve, reject) => {
           uploadTask.on(
             'state_changed',
@@ -252,7 +252,6 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
           );
         });
       });
-
       try {
         const downloadURLs = await Promise.all(uploadPromises);
         setForm((prev) => ({ ...prev, images: [...prev.images, ...downloadURLs] }));

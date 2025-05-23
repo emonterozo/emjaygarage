@@ -14,12 +14,17 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useAppStore } from '@/store/useAppStore';
+
+const USERNAME = process.env.NEXT_PUBLIC_USERNAME;
+const PASSWORD = process.env.NEXT_PUBLIC_PASSWORD;
 
 export default function Login() {
   const theme = useTheme();
   const router = useRouter();
-  const [username, setUsername] = useState('emjaygarage');
-  const [password, setPassword] = useState('');
+  const setUser = useAppStore((state) => state.setUser);
+  const [username, setUsername] = useState(USERNAME);
+  const [password, setPassword] = useState(PASSWORD);
   const [showPassword, setShowPassword] = useState(false);
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
@@ -38,7 +43,7 @@ export default function Login() {
     const data = await res.json();
 
     if (res.ok) {
-      localStorage.setItem('token', data.token);
+      setUser(data.user);
       router.push('/admin/home');
     } else {
       setSnackbar({

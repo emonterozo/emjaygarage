@@ -32,7 +32,8 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
     "react-photo-view": "^1.2.7",
-    "zod": "^3.25.7"
+    "zod": "^3.25.7",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
