@@ -508,7 +508,7 @@ export default function UnitForm({ data }: Readonly<UnitFormProps>) {
         backgroundColor: theme.palette.primary.main,
       }}
     >
-      {isLoading && <FullScreenLoader />}
+      {isLoading && <FullScreenLoader message="Loading, please wait..." />}
       <Typography
         sx={{
           fontSize: {

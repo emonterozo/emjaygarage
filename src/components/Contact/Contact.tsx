@@ -6,6 +6,7 @@ import emailjs from '@emailjs/browser';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import theme from '@/theme/theme';
 
 const contactSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -31,6 +32,7 @@ export default function Contact() {
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
     message: '',
+    type: 'success',
   });
 
   const sendEmail = (data: ContactFormData) => {
@@ -50,12 +52,14 @@ export default function Contact() {
         setSnackbar({
           isOpen: true,
           message: 'Thank you for your inquiry. We will get back to you shortly.',
+          type: 'success',
         });
       },
       () => {
         setSnackbar({
           isOpen: true,
           message: 'Something when wrong. Please try again.',
+          type: 'error',
         });
       },
     );
@@ -224,7 +228,11 @@ export default function Contact() {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         slotProps={{
           content: {
-            sx: { backgroundColor: '#4BB543', fontFamily: 'Poppins' },
+            sx: {
+              backgroundColor:
+                snackbar.type === 'success' ? theme.palette.success.main : theme.palette.error.main,
+              fontFamily: 'Poppins',
+            },
           },
         }}
         autoHideDuration={3000}
@@ -232,6 +240,7 @@ export default function Contact() {
           setSnackbar({
             isOpen: false,
             message: '',
+            type: 'success',
           });
         }}
         message={snackbar.message}

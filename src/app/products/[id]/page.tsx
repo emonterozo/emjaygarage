@@ -4,6 +4,10 @@ import connectDatabase from '@/lib/connectDatabase';
 import Product from '@/model/Product';
 import { Footer, Product as ProductComponent, Products } from '@/components';
 import { Box } from '@mui/material';
+import { Suspense } from 'react';
+import Loading from './loading';
+
+export const dynamic = 'force-dynamic';
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -29,9 +33,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
   return (
     <Box>
-      <ProductComponent product={productData} />
-      {productsData.length > 0 && <Products products={productsData} />}
-      <Footer />
+      <Suspense fallback={<Loading />}>
+        <ProductComponent product={productData} />
+        {productsData.length > 0 && <Products products={productsData} />}
+        <Footer />
+      </Suspense>
     </Box>
   );
 }

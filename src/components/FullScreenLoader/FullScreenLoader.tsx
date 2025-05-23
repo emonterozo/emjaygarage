@@ -3,10 +3,18 @@
 import dynamic from 'next/dynamic';
 const DynamicLottie = dynamic(() => import('lottie-react'), { ssr: false });
 import loadingAnimation from '@/lottie/loading.json';
+import { Box, Grid, Typography } from '@mui/material';
+import theme from '@/theme/theme';
 
-export default function FullScreenLoader() {
+type FullScreenLoaderProps = {
+  message?: string;
+};
+
+export default function FullScreenLoader({
+  message = 'Loading data, please wait...',
+}: Readonly<FullScreenLoaderProps>) {
   return (
-    <div
+    <Box
       style={{
         position: 'fixed',
         top: 0,
@@ -20,7 +28,27 @@ export default function FullScreenLoader() {
         zIndex: 9999,
       }}
     >
-      <DynamicLottie animationData={loadingAnimation} loop autoplay />
-    </div>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Grid size={12}>
+          <DynamicLottie animationData={loadingAnimation} loop autoplay />
+          <Typography
+            sx={{
+              color: theme.palette.secondary.main,
+              fontSize: { xs: '32px', md: '60px' },
+              textAlign: 'center',
+            }}
+          >
+            {message}
+          </Typography>
+        </Grid>
+      </Box>
+    </Box>
   );
 }
