@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Product from '@/model/Product';
 import { Dashboard } from '@/components';
 import connectDatabase from '@/lib/connectDatabase';
+import { Box } from '@mui/material';
+import Loading from './loading';
+
+export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
   await connectDatabase();
@@ -20,26 +24,30 @@ export default async function DashboardPage() {
   const data = JSON.parse(JSON.stringify(products));
 
   return (
-    <Dashboard
-      data={data}
-      summary={[
-        {
-          label: 'Units',
-          value: totalUnits,
-        },
-        {
-          label: 'Active Units',
-          value: totalPublishedUnit,
-        },
-        {
-          label: 'Units Owned',
-          value: totalOwnUnits,
-        },
-        {
-          label: 'Units Sold',
-          value: totalOwnSoldUnits,
-        },
-      ]}
-    />
+    <Box>
+      <Suspense fallback={<Loading />}>
+        <Dashboard
+          data={data}
+          summary={[
+            {
+              label: 'Units',
+              value: totalUnits,
+            },
+            {
+              label: 'Active Units',
+              value: totalPublishedUnit,
+            },
+            {
+              label: 'Units Owned',
+              value: totalOwnUnits,
+            },
+            {
+              label: 'Units Sold',
+              value: totalOwnSoldUnits,
+            },
+          ]}
+        />
+      </Suspense>
+    </Box>
   );
 }

@@ -4,14 +4,15 @@ import connectDatabase from '@/lib/connectDatabase';
 import Product from '@/model/Product';
 import { Product as TProduct } from '@/types/types';
 
+export const dynamic = 'force-dynamic';
+
 function shuffle(array: TProduct[]) {
   return array.sort(() => 0.5 - Math.random());
 }
 
 export default async function Home() {
   await connectDatabase();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+
   const products = await Product.find({ is_active: true }).sort({ is_sold: 1 }).lean();
 
   const productsData: TProduct[] = JSON.parse(JSON.stringify(products));

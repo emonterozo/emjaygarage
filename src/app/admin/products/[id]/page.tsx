@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import mongoose from 'mongoose';
 import connectDatabase from '@/lib/connectDatabase';
 import Product from '@/model/Product';
 import { AdminProduct } from '@/components';
 import { Box } from '@mui/material';
+import Loading from './loading';
 
 export default async function AdminProductPreview({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -21,7 +22,9 @@ export default async function AdminProductPreview({ params }: { params: Promise<
 
   return (
     <Box>
-      <AdminProduct product={data} />
+      <Suspense fallback={<Loading />}>
+        <AdminProduct product={data} />
+      </Suspense>
     </Box>
   );
 }
